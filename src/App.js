@@ -1,17 +1,17 @@
 import React from "react";
 import RecipeList from "./components/RecipeList";
-import { useState } from 'react';
+import RecipeForm from "./components/RecipeForm";
+import { useState } from "react";
 
-function App() {
-  
-    const [recipeList, setRecipes] = useState ([
+const App = () => {
+    const [recipeList, setRecipeList] = useState([
         {
             name: "The Best Crispy Roast Potatoes Ever Recipe",
             id: "1",
             author: "J. Kenji López-Alt",
             url: "https://www.seriouseats.com/the-best-roast-potatoes-ever-recipe",
             type: "Side Dish",
-            comments: [],
+            comment: "",
             rating: "10",
         },
         {
@@ -20,35 +20,30 @@ function App() {
             author: "Molly Baz",
             url: "https://www.bonappetit.com/recipe/slow-roast-gochujang-chicken",
             type: "Main",
-            comments: [],
+            comment: "Delicious. Use extra gochujang.",
             rating: "8",
         },
     ]);
 
+    const addRecipe = (recipe) => {
+        const id = Math.floor(Math.random() * 10000) + 1;
+        const newRecipe = { id, ...recipe };
+        setRecipeList([...recipeList, newRecipe]);
+    }
+  
     const deleteRecipe = (id) => {
-        setRecipes(recipeList.filter((recipe) => recipe.id !== id));
+        setRecipeList(recipeList.filter((recipe) => recipe.id !== id));
     }
 
     return (
-        <div className="App">
+        <div className="App container">
             <h1>Recipe Keeper</h1>
             {recipeList.length > 0 ? (
-            <RecipeList recipeList={recipeList} onDelete={deleteRecipe}/>
-            ) : (
-                'No Recipes'
-            )}
+            <RecipeList recipeList={recipeList} onDelete={deleteRecipe} />
+            ) : ('No Recipes')}
+            <RecipeForm onAdd={addRecipe} />
         </div>
-    );
+    )
 }
 
-export default App;
-
-// Recipe Tracking
-// RecipeList Component
-// Recipes Component
-// Recipe Form Component
-// Recipe Comments Prop
-// Recipe Rating Prop
-// Recipe URL Prop
-// Recipe Author Prop
-// Recipe Type Prop
+export default App
