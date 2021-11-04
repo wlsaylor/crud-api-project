@@ -1,49 +1,78 @@
 import React from "react";
 import RecipeList from "./components/RecipeList";
 import RecipeForm from "./components/RecipeForm";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { Container } from "react-bootstrap";
+import EditRecipeForm from "./components/EditRecipeForm";
 const App = () => {
-    const [recipeList, setRecipeList] = useState([
-        {
-            name: "The Best Crispy Roast Potatoes Ever Recipe",
-            id: "1",
-            author: "J. Kenji López-Alt",
-            url: "https://www.seriouseats.com/the-best-roast-potatoes-ever-recipe",
-            type: "Side Dish",
-            comment: "",
-            rating: "10",
-        },
-        {
-            name: "Slow-Roast Gochujang Chicken",
-            id: "2",
-            author: "Molly Baz",
-            url: "https://www.bonappetit.com/recipe/slow-roast-gochujang-chicken",
-            type: "Main",
-            comment: "Delicious. Use extra gochujang.",
-            rating: "8",
-        },
-    ]);
+    const RECIPE_ENDPOINT = "https://crudcrud.com/api/e891aab3f5544f0ca4a694084fa5fbfe/recipes";
 
-    const addRecipe = (recipe) => {
-        const id = Math.floor(Math.random() * 10000) + 1;
-        const newRecipe = { id, ...recipe };
-        setRecipeList([...recipeList, newRecipe]);
-    }
+    // Add state
+    const [recipeList, setRecipeList] = useState([]);
+    const [editing, setEditing] = useState(false);
+    const [recipeToEdit, setRecipeToEdit] = useState({});
+
+    // Iniitialize state from server
+    useEffect(() => {
+        const getRecipes = async () => {
+            const recipesFromServer = await fetchRecipes();
+            setRecipeList(recipesFromServer);
+        }
+        getRecipes();
+    }, []);
+
+    // GET recipes from server
+    const fetchRecipes = async () => {
+        const res = await fetch(RECIPE_ENDPOINT);
+        const data = await res.json();
+
+        return data;
+    };
+    
+    // ADD recipe to state and server
+    const addRecipe = async (recipe) => {
+        const res = await fetch(RECIPE_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(recipe),
+        });
+        const data = await res.json();
+
+        setRecipeList([...recipeList, data]);
+    };
   
-    const deleteRecipe = (id) => {
-        setRecipeList(recipeList.filter((recipe) => recipe.id !== id));
-    }
+    // DELETE target recipe from state and server
+    const deleteRecipe = async (_id) => {
+        await fetch(`${RECIPE_ENDPOINT}/${_id}`, {
+            method: 'DELETE'
+        });
+
+        setRecipeList(recipeList.filter((recipe) => recipe._id !== _id));
+    };
+
+    // TODO: Finish Update https://jsonworld.com/demo/crud-application-in-reactjs-with-hooks-example-and-tutorial
+    // UPDATE target recipe in state and server in dedicated edit form
+    const editRecipe = (_id) => {
+        console.log(_id);
+        setRecipeToEdit(recipeList.filter((recipe) => recipe._id === _id));
+        setEditing(true);
+        setRecipeList(recipeList.map())
+        setEditing(false);
+    };
 
     return (
-        <div className="App container">
-            <h1>Recipe Keeper</h1>
-            {recipeList.length > 0 ? (
-            <RecipeList recipeList={recipeList} onDelete={deleteRecipe} />
-            ) : ('No Recipes')}
-            <RecipeForm onAdd={addRecipe} />
-        </div>
+        <Container>
+                <h1 className="mb-4">Recipe Keeper</h1>
+                {editing 
+                    ? <EditRecipeForm onEdit={editRecipe} recipeToEdit={recipeToEdit}/> 
+                    : <div><RecipeList recipeList={recipeList} onDelete={deleteRecipe} onEdit={editRecipe} />
+                    <RecipeForm onAdd={addRecipe} />
+                    </div>
+                }
+        </Container>
     )
-}
+};
 
-export default App
+export default App;

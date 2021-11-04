@@ -1,15 +1,16 @@
 import React from 'react'
 import Recipe from './Recipe';
+import { Row } from 'react-bootstrap';
 
 const RecipeList = ({ recipeList, onDelete, onEdit}) => {
 
     return (
-        <div>
+        <Row className="d-flex justify-content-center">
             {recipeList.map((recipe, id) => (
                 <Recipe key={id} recipe={recipe} onDelete={onDelete} onEdit={onEdit} />
             ))}
-        </div>
+        </Row>
     )
-}
+};
 
-export default RecipeList
+export default RecipeList;

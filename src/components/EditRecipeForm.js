@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 
-const RecipeForm = ({ onAdd }) => {
+const EditRecipeForm = ({ onEdit, recipeToEdit }) => {
 
     // Initialize state on form
     const [name, setName] = useState('');
@@ -16,7 +16,7 @@ const RecipeForm = ({ onAdd }) => {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        onAdd({name, author, URL, category, rating, comment})
+        onEdit({name, author, URL, category, rating, comment})
         
         setName('')
         setAuthor('')
@@ -78,4 +78,4 @@ const RecipeForm = ({ onAdd }) => {
     )
 };
 
-export default RecipeForm;
+export default EditRecipeForm;
