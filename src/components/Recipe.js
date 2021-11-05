@@ -4,7 +4,7 @@ import { Card, Col } from 'react-bootstrap';
 
 const Recipe = ({recipe, onDelete, onEdit }) => {
     return (
-        <Col lg={6}>
+        <Col lg={6} className="mb-1">
             <Card className="h-100">
             <Card.Header className="m-2 p-2"><h3>{recipe.name}</h3></Card.Header>
             <Card.Body>

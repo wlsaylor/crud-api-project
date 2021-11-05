@@ -18,12 +18,12 @@ const RecipeForm = ({ onAdd }) => {
 
         onAdd({name, author, URL, category, rating, comment})
         
-        setName('')
-        setAuthor('')
-        setURL('')
-        setCategory('')
-        setRating('')
-        setComment('')
+        setName('');
+        setAuthor('');
+        setURL('');
+        setCategory('');
+        setRating('');
+        setComment('');
     };
 
     return (
