@@ -92,10 +92,10 @@ function EditRecipeModal({show, handleClose, recipeToEdit, onUpdate}) {
                         </Form.Select>
                     </Col>
                 </Row>
-                <Form.Group className="mb-3" value={comment} onChange={(e) => setComment(e.target.value)} id="recipeForm.comment">
-                    <Form.Label>Recipe Comments</Form.Label>
-                    <Form.Control as="textarea" rows={3} />
-                </Form.Group>
+                <Form.Group className="mb-3" id="recipeForm.comment">
+                <Form.Label>Recipe Comments</Form.Label>
+                <Form.Control as="textarea" value={comment} onChange={(e) => setComment(e.target.value)}/>
+            </Form.Group>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
