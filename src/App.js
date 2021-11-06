@@ -4,10 +4,10 @@ import RecipeForm from "./components/RecipeForm";
 import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import EditRecipeModal from "./components/EditRecipeModal";
+import { getRecipes, createRecipe, updateRecipe, deleteRecipeApi } from "./services/Apis";
 
 const App = () => {
-    const RECIPE_ENDPOINT = "https://crudcrud.com/api/1517a813a7fc4eb49749670987f68672/recipes";
-
+    
     // Give Edit Form initial state to keep it controlled
     const initialEditFormState = {_id: null, name: '', author: '', URL:'', category:'', rating:'', comment:''};
 
@@ -19,64 +19,30 @@ const App = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    // Iniitialize state from server
+    // Iniitialize client state from server payload
     useEffect(() => {
-        const getRecipes = async () => {
-            const recipesFromServer = await fetchRecipes();
-            setRecipeList(recipesFromServer);
-        }
-        getRecipes();
+        fetchRecipes();
     }, []);
 
     // GET recipes from server
     const fetchRecipes = async () => {
-        try {
-            const res = await fetch(RECIPE_ENDPOINT);
-            const data = await res.json();
-    
-            return data;
-        } catch(e) {
-            console.log('There was an error retrieving the recipes', e);
-        }
-
+        const recipesFromServer = await getRecipes();
+        setRecipeList(recipesFromServer);
     };
     
     // ADD recipe to state and server
     const addRecipe = async (recipe) => {
-        try {
-            const res = await fetch(RECIPE_ENDPOINT, 
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(recipe),
-            });
-            const data = await res.json();
-    
-            setRecipeList([...recipeList, data]);
-        } catch(e) {
-            console.log('There was an error adding the recipe', e);
-        }
-
+        const data = createRecipe(recipe);
+        setRecipeList([...recipeList, data]);
     };
   
     // DELETE target recipe from state and server
     const deleteRecipe = async (_id) => {
-        try {
-            await fetch(`${RECIPE_ENDPOINT}/${_id}`, 
-            {
-                method: 'DELETE'
-            });
-    
-            setRecipeList(recipeList.filter((recipe) => recipe._id !== _id));
-        } catch(e) {
-            console.log('There was an error deleting the recipe', e);
-        }
-
+        deleteRecipeApi(_id);
+        setRecipeList(recipeList.filter((recipe) => recipe._id !== _id));
     };
 
-    // Load edit recipe modal
+    // Display edit recipe modal with populated values
     const editRecipe = (_id) => {
         setRecipeToEdit(recipeList.filter((recipe) => recipe._id === _id));
         handleShow();
@@ -84,28 +50,18 @@ const App = () => {
 
     // UPDATE recipe from edit form and refresh page
     const onUpdate = async (editedRecipe) => {
-        try {
-            const { _id, ...recipeWithoutId} = editedRecipe;
-            const resp = await fetch(`${RECIPE_ENDPOINT}/${_id}`, 
-            { 
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(recipeWithoutId)
-            });
-            const recipesFromServer = await fetchRecipes();
-            setRecipeList(recipesFromServer);
-
-            return resp;
-        } catch(e) {
-            console.log('There was an error updating the recipe', e);
-        }
+        const { _id, ...recipeWithoutId} = editedRecipe;
+        updateRecipe(_id, recipeWithoutId);
+        await fetchRecipes();
     }
 
     return (
         <Container>
             <h1 className="mb-4">Recipe Keeper</h1>
             <EditRecipeModal recipeToEdit={recipeToEdit} show={show} handleClose={handleClose} onUpdate={onUpdate} /> 
-            <RecipeList recipeList={recipeList} onDelete={deleteRecipe} onEdit={editRecipe} />
+            {recipeList.length > 0 
+            ? <RecipeList recipeList={recipeList} onDelete={deleteRecipe} onEdit={editRecipe} />
+            : <h2>No Recipes</h2>}
             <RecipeForm onAdd={addRecipe} />
         </Container>
     )

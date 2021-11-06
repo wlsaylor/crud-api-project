@@ -1,6 +1,8 @@
 import React from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import CategoryOptions from './CategoryOptions';
+import RatingOptions from './RatingOptions';
 
 function EditRecipeModal({show, handleClose, recipeToEdit, onUpdate}) {
     // Initialize state on form
@@ -12,6 +14,7 @@ function EditRecipeModal({show, handleClose, recipeToEdit, onUpdate}) {
     const [comment, setComment] = useState('');
     const [_id, set_id] = useState('');
 
+    // Update form values when the recipeToEdit state is updated
     useEffect(
         () => {
             if (show) {fillForm(recipeToEdit[0]);}
@@ -19,6 +22,7 @@ function EditRecipeModal({show, handleClose, recipeToEdit, onUpdate}) {
         [recipeToEdit, show]
     )
 
+    // Populates values in form
     const fillForm = (recipeToEdit) => {
         setName(recipeToEdit.name);
         setAuthor(recipeToEdit.author);
@@ -53,48 +57,33 @@ function EditRecipeModal({show, handleClose, recipeToEdit, onUpdate}) {
           <Modal.Body>
                 <Form.Group className="mb-3" id="recipeForm.name">
                     <Form.Label>Recipe Name</Form.Label>
-                    <Form.Control type="input" value={name} onChange={(e) => setName(e.target.value)} required placeholder="e.g. 'Spicy Cocunut Shrimp'" />
+                    <Form.Control type="input" value={name} onChange={(e) => setName(e.target.value)} required />
                 </Form.Group>
                 <Form.Group className="mb-3" id="recipeForm.author">
                     <Form.Label>Author</Form.Label>
-                    <Form.Control type="input" value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="e.g. 'Bill Saylor'" />
+                    <Form.Control type="input" value={author} onChange={(e) => setAuthor(e.target.value)} />
                 </Form.Group>
                 <Form.Group className="mb-3" id="recipeForm.url">
                     <Form.Label>URL</Form.Label>
-                    <Form.Control as="input" value={URL} onChange={(e) => setURL(e.target.value)} required placeholder="https://recipeurl.com/" />
+                    <Form.Control as="input" value={URL} onChange={(e) => setURL(e.target.value)} required />
                 </Form.Group>
                 <Row className="my-3">
                     <Col>
+                        <Form.Label>Category</Form.Label>
                         <Form.Select value={category} onChange={(e) => setCategory(e.target.value)} id="recipeForm.category">
-                            <option>Recipe Category</option>
-                            <option value="main">Main Dish</option>
-                            <option value="side">Side Dish</option>
-                            <option value="dessert">Dessert</option>
-                            <option value="soup">Soup</option>
-                            <option value="salad">Salad</option>
-                            <option value="snack">Snack/Appetizer</option>
-                            <option value="breakfast">Breakfast</option>
+                            <CategoryOptions />
                         </Form.Select>
                     </Col>
                     <Col>
+                        <Form.Label>Rating</Form.Label>
                         <Form.Select value={rating} onChange={(e) => setRating(e.target.value)} id="recipeForm.rating">
-                            <option>Rate this Recipe</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                            <option value="4">Four</option>
-                            <option value="5">Five</option>
-                            <option value="5">Six</option>
-                            <option value="7">Seven</option>
-                            <option value="8">Eight</option>
-                            <option value="9">Nine</option>
-                            <option value="10">Ten</option>
+                            <RatingOptions />
                         </Form.Select>
                     </Col>
                 </Row>
                 <Form.Group className="mb-3" id="recipeForm.comment">
-                <Form.Label>Recipe Comments</Form.Label>
-                <Form.Control as="textarea" value={comment} onChange={(e) => setComment(e.target.value)}/>
+                <Form.Label>Comments</Form.Label>
+                <Form.Control as="textarea" value={comment} onChange={(e) => setComment(e.target.value)} />
             </Form.Group>
             </Modal.Body>
             <Modal.Footer>

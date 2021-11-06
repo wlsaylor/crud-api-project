@@ -1,6 +1,8 @@
 import React from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
+import CategoryOptions from './CategoryOptions';
+import RatingOptions from './RatingOptions';
 
 const RecipeForm = ({ onAdd }) => {
 
@@ -27,10 +29,11 @@ const RecipeForm = ({ onAdd }) => {
     };
 
     return (
-        <Form onSubmit={onSubmit}>
+        <Form onSubmit={onSubmit} className="border bg-light rounded p-2">
+            <h3 className="mb-3">Add Recipe</h3>
             <Form.Group className="mb-3" id="recipeForm.name">
                 <Form.Label>Recipe Name</Form.Label>
-                <Form.Control type="input" value={name} onChange={(e) => setName(e.target.value)} required placeholder="e.g. 'Spicy Cocunut Shrimp'" />
+                <Form.Control type="input" value={name} onChange={(e) => setName(e.target.value)} required placeholder="e.g. 'Spicy Coconut Shrimp'" />
             </Form.Group>
             <Form.Group className="mb-3" id="recipeForm.author">
                 <Form.Label>Author</Form.Label>
@@ -42,35 +45,20 @@ const RecipeForm = ({ onAdd }) => {
             </Form.Group>
             <Row className="my-3">
                 <Col>
+                    <Form.Label>Category</Form.Label>
                     <Form.Select value={category} onChange={(e) => setCategory(e.target.value)} id="recipeForm.category">
-                        <option>Recipe Category</option>
-                        <option value="main">Main Dish</option>
-                        <option value="side">Side Dish</option>
-                        <option value="dessert">Dessert</option>
-                        <option value="soup">Soup</option>
-                        <option value="salad">Salad</option>
-                        <option value="snack">Snack/Appetizer</option>
-                        <option value="breakfast">Breakfast</option>
+                        <CategoryOptions />
                     </Form.Select>
                 </Col>
                 <Col>
+                    <Form.Label>Rating</Form.Label>
                     <Form.Select value={rating} onChange={(e) => setRating(e.target.value)} id="recipeForm.rating">
-                        <option>Rate this Recipe</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                        <option value="4">Four</option>
-                        <option value="5">Five</option>
-                        <option value="5">Six</option>
-                        <option value="7">Seven</option>
-                        <option value="8">Eight</option>
-                        <option value="9">Nine</option>
-                        <option value="10">Ten</option>
+                        <RatingOptions />
                     </Form.Select>
                 </Col>
             </Row>
             <Form.Group className="mb-3" id="recipeForm.comment">
-                <Form.Label>Recipe Comments</Form.Label>
+                <Form.Label>Comments</Form.Label>
                 <Form.Control as="textarea" value={comment} onChange={(e) => setComment(e.target.value)}/>
             </Form.Group>
             <Button variant="primary" type="submit">Add Recipe</Button>
