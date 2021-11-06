@@ -9,6 +9,7 @@ const getFetchOptions = (method, data) => ({
 
 /** 
  * GETS recipes from server
+ * @returns object
  */
 export const getRecipes = async () => {
     try {
@@ -41,7 +42,7 @@ export const createRecipe = async (recipe) => {
  * UPDATES recipe in server
  * @param {string} _id Recipe ID
  * @param {object} recipeWithoutId 
- * @returns 
+ * @returns resp
  */
 export const updateRecipe = async (_id, recipeWithoutId) => {
     try {
@@ -57,7 +58,7 @@ export const updateRecipe = async (_id, recipeWithoutId) => {
 /**
  * DELETES recipe from server
  * @param {string} _id Recipe ID
- * @returns null
+ * @returns resp
  */
 export const deleteRecipeApi = async (_id) => {
     try {

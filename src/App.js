@@ -32,8 +32,8 @@ const App = () => {
     
     // ADD recipe to state and server
     const addRecipe = async (recipe) => {
-        const data = createRecipe(recipe);
-        setRecipeList([...recipeList, data]);
+        createRecipe(recipe);
+        setRecipeList([...recipeList, recipe]);
     };
   
     // DELETE target recipe from state and server
